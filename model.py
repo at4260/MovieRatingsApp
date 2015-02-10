@@ -26,8 +26,8 @@ class Movie(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(128), nullable=False)
-    release_date = Column(DateTime, nullable=False)
-    url = Column(String(128), nullable=False)
+    release_date = Column(DateTime, nullable=True)
+    url = Column(String(128), nullable=True)
 
 class Rating(Base):
     __tablename__ = "ratings"
