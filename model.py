@@ -1,6 +1,10 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.orm import sessionmaker
+
+ENGINE = None
+Session = None
 
 Base = declarative_base()
 
@@ -14,7 +18,10 @@ class User(Base):
     age = Column(Integer, nullable=True)
     zipcode = Column(String(15), nullable=True)
 
-class Movies(Base):
+    def __repr__(self):
+        return "<User email=%s password=%s age=%d zipcode=%s>" % (self.email, self.password, self.age, self.zipcode)
+
+class Movie(Base):
     __tablename__ = "movies"
 
     id = Column(Integer, primary_key=True)
@@ -22,7 +29,7 @@ class Movies(Base):
     release_date = Column(DateTime, nullable=False)
     url = Column(String(128), nullable=False)
 
-class Ratings(Base):
+class Rating(Base):
     __tablename__ = "ratings"
 
     id = Column(Integer, primary_key=True)
@@ -33,10 +40,18 @@ class Ratings(Base):
 
 
 ### End class declarations
+def connect():
+    global ENGINE
+    global Session
+
+    ENGINE = create_engine("sqlite:///ratings.db", echo=True)
+    Session = sessionmaker(bind=ENGINE)
+
+    return Session()
+
 
 def main():
     """In case we need this for something"""
-    pass
 
 if __name__ == "__main__":
     main()
