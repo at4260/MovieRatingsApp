@@ -31,11 +31,11 @@ def load_movies(session):
             # convert latin-1 formatting (with special characters) to unicode, allowing SQLAlchemy to work
             movie_title = movie_title.decode("latin-1")
             movie_release = row[2]
-            # convert data to datetime only when release date is not empty (otherwise, code will fail)
+            # convert data to datetime only when release date is not empty; if empty, set to None
             if movie_release != "":
                 movie_date = datetime.strptime(movie_release, "%d-%b-%Y")
             else:
-                continue
+                movie_date = None
             # if url doesn't exist, add "" (okay because field is nullable)
             movie_url = row[4]
             my_new_movie = Movie(title=movie_title, release_date=movie_date, url=movie_url)
