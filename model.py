@@ -29,6 +29,9 @@ class Movie(Base):
     release_date = Column(DateTime, nullable=True)
     url = Column(String(128), nullable=True)
 
+    def __repr__(self):
+        return "<User id=%s title=%s release date=%s url=%s>" % (self.id, self.title, self.release_date, self.url)
+
 class Rating(Base):
     __tablename__ = "ratings"
 
@@ -37,6 +40,8 @@ class Rating(Base):
     movie_id = Column(Integer, nullable=False)
     rating = Column(Integer, nullable=False)
 
+    def __repr__(self):
+        return "<User id=%s user id=%s movie id=%s rating=%s>" % (self.id, self.user_id, self.movie_id, self.rating)
 
 
 ### End class declarations

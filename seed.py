@@ -26,10 +26,13 @@ def load_movies(session):
     with open(filename, 'rb') as csvfile:
         openfile = csv.reader(csvfile, delimiter='|')
         for row in openfile:
-            movie_id = row[0]
             movie_title = row[1]
             # convert latin-1 formatting (with special characters) to unicode, allowing SQLAlchemy to work
             movie_title = movie_title.decode("latin-1")
+            if "(" not in movie_title:
+                movie_title = movie_title
+            else:
+                movie_title = movie_title[:-7]
             movie_release = row[2]
             # convert data to datetime only when release date is not empty; if empty, set to None
             if movie_release != "":
