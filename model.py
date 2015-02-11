@@ -1,7 +1,7 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship, backref
 
 ENGINE = None
 Session = None
@@ -29,19 +29,27 @@ class Movie(Base):
     release_date = Column(DateTime, nullable=True)
     url = Column(String(128), nullable=True)
 
+
     def __repr__(self):
-        return "<User id=%s title=%s release date=%s url=%s>" % (self.id, self.title, self.release_date, self.url)
+        return "<Movie id=%s title=%s release date=%s url=%s>" % (self.id, self.title, self.release_date, self.url)
 
 class Rating(Base):
     __tablename__ = "ratings"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, nullable=False)
-    movie_id = Column(Integer, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    movie_id = Column(Integer, ForeignKey('movies.id'), nullable=False)
     rating = Column(Integer, nullable=False)
 
+    user = relationship("User",
+            backref=backref("ratings", order_by=id))
+
+    movie = relationship("Movie",
+            backref=backref("ratings", order_by=id))
+    
+
     def __repr__(self):
-        return "<User id=%s user id=%s movie id=%s rating=%s>" % (self.id, self.user_id, self.movie_id, self.rating)
+        return "<user id=%s movie id=%s rating=%s>" % (self.user_id, self.movie_id, self.rating)
 
 
 ### End class declarations
