@@ -1,3 +1,6 @@
+<!-- create form action to take data and place in database (options: we can flash a msg that says "acct has been created") -->
+{% extends 'base.html' %}
+{% block body %}
 <form class="form-signin" method="POST">
     <h2 class="form-signin-heading">Please Create an Account</h2>
     <input type="email" name="email" class="form-control" placeholder="Email Address"/><br>
@@ -6,3 +9,4 @@
     <input type="zipcode" name="zipcode" class="form-control" placeholder="Zipcode"/><br>
     <button type="btn btn-lg btn-primary btn-block" type="submit">Create New Account</button>
 </form>
+{% endblock %}
