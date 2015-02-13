@@ -40,14 +40,27 @@ def process_login():
 
     email = request.form['email']
     password = request.form['password']
-    flask_session["email"] = email   
-    return redirect("/all_users")
 
+    # need to check that email and password combo matches the email/password in the User table
+
+    user = model_session.query(model.User).filter(model.User.email == email).first()
+    if user != None:
+        if email == user.email and password == user.password:
+            flask_session['email'] = email
+            flash("Hello %s! Login successful."% (user.email))
+            return redirect("/all_users")
+        else:
+            flash("Incorrect password! Try again.")
+            return redirect("/login")
+    else: 
+        flash("Create an account first!")
+        return redirect("/create")
+   
 @app.route("/all_users")
 def index():
+    """ToDo: create links for each user and send it as a GET request like the Ubermelon App"""
     user_list = model_session.query(model.User).limit(5).all()
     return render_template("user_list.html", users=user_list)
-    """ToDo: create links for each user and send it as a GET request like the Ubermelon App"""
-
+    
 if __name__ == "__main__":
     app.run(debug = True)
